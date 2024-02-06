@@ -6,6 +6,9 @@
                 <h5>Slot Booking</h5>
             </div>
             <div>
+                <a href="index.php?page=slot/booking" class="btn btn-primary float-right">
+                    Booking details
+                </a>
             </div>
         </div>                                 
         </div>

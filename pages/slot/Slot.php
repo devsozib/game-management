@@ -8,7 +8,7 @@ class Slot {
     }
 
     public function getSlotBookingsInfo($game_id, $date, $time){
-        $result = $this->conn->query("SELECT * FROM slots WHERE game_id=$game_id and date='$date' and time='$time'");
+        $result = $this->conn->query("SELECT * FROM slots WHERE game_id='$game_id' and date='$date' and time='$time'");
         $slots = [];
 
         while ($row = $result->fetch_assoc()) {
@@ -28,9 +28,10 @@ class Slot {
             return false;
         }
     }
-
+    
     public function closeConnection() {
         $this->conn->close();
     }
+    
 }
 ?>

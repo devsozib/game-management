@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jan 19, 2024 at 01:54 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Host: 127.0.0.1
+-- Generation Time: Jan 17, 2024 at 06:19 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `games` (
-  `id` int NOT NULL,
-  `game_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `game_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `board_number` int NOT NULL,
-  `max_players` int NOT NULL
+  `id` int(11) NOT NULL,
+  `game_name` varchar(255) NOT NULL,
+  `game_type` varchar(255) NOT NULL,
+  `board_number` int(11) NOT NULL,
+  `max_players` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -43,7 +43,7 @@ INSERT INTO `games` (`id`, `game_name`, `game_type`, `board_number`, `max_player
 (1, 'Anastasia Hendricks', 'Officia quo voluptat', 337, 4),
 (2, 'Xena Key', 'Natus ex vitae excep', 822, 46),
 (3, 'Macon Hopkins', 'Ut corrupti dolor i', 430, 85),
-(4, 'Kirestin Allison', 'Reiciendis commodo a', 82, 2),
+(4, 'Kirestin Allison', 'Reiciendis commodo a', 82, 20),
 (5, 'Sigourney Bernard', 'Do at maxime eiusmod', 376, 6),
 (6, 'Lana Carson', 'Eum laborum omnis ex', 741, 19),
 (7, 'Larissa Walton', 'Quos impedit distin', 746, 61),
@@ -66,12 +66,12 @@ INSERT INTO `games` (`id`, `game_name`, `game_type`, `board_number`, `max_player
 --
 
 CREATE TABLE `slots` (
-  `id` bigint NOT NULL,
-  `game_id` bigint NOT NULL,
-  `student_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `date` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `time` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) NOT NULL,
+  `game_id` bigint(20) NOT NULL,
+  `student_id` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `time` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -82,12 +82,7 @@ INSERT INTO `slots` (`id`, `game_id`, `student_id`, `date`, `time`, `created_at`
 (1, 18, '22333', '0000-00-00', '12am', '2024-01-17 17:16:44'),
 (2, 18, '123255', '0000-00-00', '12am', '2024-01-17 17:17:35'),
 (3, 18, '45415', '0000-00-00', '12am', '2024-01-17 17:17:53'),
-(4, 18, '64646', '0000-00-00', '12am', '2024-01-17 17:18:09'),
-(5, 1, '22333', '18-01-2024', '12am', '2024-01-18 12:38:48'),
-(6, 6, '22333', '18-01-2024', '12am', '2024-01-18 12:40:43'),
-(7, 2, '22333', '18-01-2024', '12am', '2024-01-18 12:41:14'),
-(8, 4, '64646', '18-01-2024', '12am', '2024-01-18 13:43:37'),
-(9, 4, '45415', '18-01-2024', '12am', '2024-01-18 13:44:19');
+(4, 18, '64646', '0000-00-00', '12am', '2024-01-17 17:18:09');
 
 -- --------------------------------------------------------
 
@@ -96,10 +91,10 @@ INSERT INTO `slots` (`id`, `game_id`, `student_id`, `date`, `time`, `created_at`
 --
 
 CREATE TABLE `students` (
-  `id` int NOT NULL,
-  `student_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `student_id` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `id` int(11) NOT NULL,
+  `student_name` varchar(255) NOT NULL,
+  `student_id` varchar(20) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -143,19 +138,19 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `slots`
 --
 ALTER TABLE `slots`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

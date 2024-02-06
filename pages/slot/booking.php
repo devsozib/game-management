@@ -3,11 +3,11 @@
         <div class="card-header">
         <div class="d-flex justify-content-between">
             <div>
-                <h5>My Booking Slot</h5>
+                <h5>Slot booking details</h5>
             </div>
             <div>
-                <a href="index.php?page=slot_booking/index" class="btn btn-primary float-right">
-                    
+                <a href="index.php?page=slot/index" class="btn btn-primary float-right">
+                    Booking slot
                 </a>
             </div>
         </div>                                 
@@ -15,59 +15,82 @@
         <div class="card-body">
         <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h6>Registration New Game</h6>
-                <?php
-                $message = isset($_GET['message']) ? urldecode($_GET['message']) : '';
-                $error = isset($_GET['error']) ? urldecode($_GET['error']) : '';
-                 if ($message) {
-                    echo "<div class='alert alert-info alert-dismissible fade show' role='alert'>
-                                  $message
-                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                    <span aria-hidden='true'>&times;</span>
-                                  </button>
-                              </div>";
-                    } elseif ($error) {
-                        echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-                                  $error
-                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                    <span aria-hidden='true'>&times;</span>
-                                  </button>
-                              </div>";
-                    }
-                  ?>
-                <form action="pages/game/handleLogic.php" method="post">
-                    <div class="form-row">
-                        <div class="col-md-12 mb-3">
-                            <label for="game_name">Game Name:</label>
-                            <input type="text" id="game_name" name="game_name" class="form-control" placeholder="Enter game name" required>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="game_type">Game Type:</label>
-                            <input type="text" id="game_type" name="game_type" class="form-control" placeholder="Enter game type" required>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="board_number">Board Number:</label>
-                            <input type="number" id="board_number" name="board_number" class="form-control" placeholder="Enter board number" required>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="max_players">Max Players:</label>
-                            <input type="number" id="max_players" name="max_players" class="form-control" placeholder="Enter max players" required>
-                        </div>
-
-                        <!-- Add other relevant fields as needed -->
-
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">Register Game</button>
-                        </div>
+            <div class="col-md-12">  
+                <div class="row">
+                    <?php   
+                        include __DIR__ .'/../game/Game.php';
+                        $game = new Game();
+                        $games = $game->getAllGames();
+                        $game->closeConnection();
+                    ?>
+                    <div class="col-3">
+                        <select class="form-select" id="game" aria-label="Default select example">
+                            <option selected>--Select Game--</option>
+                            <?php foreach($games as $game): ?>
+                                    <option value="<?php echo $game['id'] ?>"><?php echo $game['game_name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                </form>
+                    <div class="col-3">
+                        <input type="date" class="form-control" id="date" value="">
+                    </div>
+                    <div class="col-3" >                                          
+                        <select name="time" id="time" class="form-control">
+                            <option value="<?php echo 12?>am"><?php echo 12?>am</option>
+                            <?php for($i=1;$i<=11; $i++):?>
+                                <option value="<?php echo $i?>am"><?php echo $i?>am</option>
+                            <?php endfor;?>
+                            
+                            <?php for($i=1;$i<=11; $i++):?>
+                                <option value="<?php echo $i?>pm"><?php echo $i?>pm</option>
+                            <?php endfor;?>
+                            <option value="<?php echo 12?>pm"><?php echo 12?>pm</option>
+                        </select>                      
+                    </div>
+                    <div class="col-3" >
+                        <input type="button" class="btn btn-primary" value="Display" onclick="getBookingDetails()">
+                    </div>
+                </div>                  
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Game</th>
+                            <th>Student</th>                                                       
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="bookingDetailsTB">
+                        
+                    </tbody>
+                </table>             
             </div>
         </div>
     </div>
         </div>
         </div>             
     </main>            
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function getBookingDetails () {
+            var gameId = document.getElementById('game').value;
+            var date = document.getElementById('date').value;
+            var time = document.getElementById('time').value;
+            // console.log(gameId, date, time);
+            $.ajax({
+                method: "get",
+                url: 'pages/slot/handleLogic.php',
+                data: {
+                    function: "getSlotBookingDetails",
+                    gameId:gameId,
+                    date:date,
+                    time:time
+                }
+            })
+            .done(function(response) {
+                console.log(response);
+                document.getElementById('bookingDetailsTB').innerHTML = response;
+            });
+            
+        }
+    </script>

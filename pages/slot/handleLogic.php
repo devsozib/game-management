@@ -3,6 +3,8 @@ include __DIR__ .'/../student/Student.php';
 include __DIR__ .'/../game/Game.php';
 include __DIR__ .'/Slot.php';
 
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $student_id =  $_POST["id"];
     $game_id = $_POST["game"];
@@ -60,7 +62,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $game_db->closeConnection();
     $slot_db->closeConnection();
 } else {
+    $game_db = new Game();
+    $student_db = new Student();
+   if(isset($_GET['function']) && $_GET['function'] == "getSlotBookingDetails"){
+       $games =  $game_db->getAllGames();
+       $students =  $student_db->getAllStudents();
+       $tempStudents = [];
+       foreach($students as $item){
+            $tempStudents[$item['student_id']] = $item['student_name'];
+       }
+       $tempGames = [];
+       foreach($games as $item){
+            $tempGames[$item['id']] = $item['game_name'];
+       }
+        $jsonResponse = getSlotBookingDetails();
+        $html = "";
+        foreach ($jsonResponse as $index => $game) {
+            $html .= "<tr>
+                        <td>" . ($index + 1) . "</td>
+                        <td>" . (isset($tempGames[$game['game_id']]) ? $tempGames[$game['game_id']] : '') . "</td>
+                        <td>" . (isset($tempStudents[$game['student_id']]) ? $tempStudents[$game['student_id']] : '') . "</td>
+                    </tr>";
+        }
+        echo $html;
+        exit();
+    }
     header("Location: index.php");
-    exit();
 }
+function getSlotBookingDetails () {
+    
+    $gameId = ($_GET['gameId']);
+    $timestamp = strtotime($_GET['date']);
+    $date = date("d-m-Y",$timestamp);   
+    $time = ($_GET['time']);
+    $slot = new Slot();
+    // print_r([$date, $time, $date]);
+   return $slot->getSlotBookingsInfo($gameId, $date, $time);
+
+}
+
 ?>
